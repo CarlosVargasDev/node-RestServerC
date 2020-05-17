@@ -2,13 +2,15 @@ const express = require('express');
 const Usuario = require('./userModel');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
+const { verificaToken, verificarAdminRole } = require('../middlewares/autentication');
+
 
 const app = express();
 
 
 
 
-app.get('/user', (req, res) => {
+app.get('/user', verificaToken, (req, res) => {
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
@@ -52,7 +54,7 @@ app.get('/user', (req, res) => {
     // });
 });
 
-app.post('/user', (req, res) => {
+app.post('/user', [verificaToken, verificarAdminRole], (req, res) => {
     let body = req.body;
     let usuario = new Usuario({
         nombre: body.nombre,
@@ -76,7 +78,7 @@ app.post('/user', (req, res) => {
 
 });
 
-app.put('/user/:id', (req, res) => {
+app.put('/user/:id', [verificaToken, verificarAdminRole], (req, res) => {
     let id = req.params.id;
     //Definimos los Campos a actualizar 
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
@@ -96,7 +98,7 @@ app.put('/user/:id', (req, res) => {
     });
 });
 
-app.delete('/user/:id', (req, res) => {
+app.delete('/user/:id', [verificaToken, verificarAdminRole], (req, res) => {
     let id = req.params.id;
     let cambiarEstado = {
         status: false
