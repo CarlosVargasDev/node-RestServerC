@@ -19,12 +19,11 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 //Base de datos
 let urlDB;
 
-if(process.env.NODE_ENV === 'dev'){
-	urlDB = 'mongodb://localhost/testCafeUltimate';
-}else{
-	urlDB = 'mongodb+srv://database_admin:OXeM0iRUWLklvCVL@cluster0-3mjyf.mongodb.net/cafeOne';
+if (process.env.NODE_ENV === 'dev') {
+    urlDB = 'mongodb://localhost/testCafeUltimate';
+} else {
+    urlDB = process.env.MONGO_URI;
 }
 
 
 process.env.URLDB = urlDB;
-
