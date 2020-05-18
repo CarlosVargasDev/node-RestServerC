@@ -20,7 +20,7 @@ app.use(require('./indexRoutes'));
 
 
 
-mongoose.connect('mongodb://localhost/testCafeUltimate', { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false });
+mongoose.connect(process.env.URLDB, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false });
 
 
 
