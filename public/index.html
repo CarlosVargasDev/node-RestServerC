@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign In Demo</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="34942969066-pm16ccj030ek0bikieiq1k15c792bqou.apps.googleusercontent.com">
+</head>
+
+<body>
+
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+    <a href="#" onclick="signOut();">Sign out</a>
+    <script>
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function() {
+                console.log('User signed out.');
+            });
+        }
+    </script>
+
+
+
+    <script>
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+            //Este token es enviado por google y lo vamos a comparar con una libreria en mi backend
+            var id_token = googleUser.getAuthResponse().id_token;
+            console.log("Token Google:\n" + id_token);
+
+
+            //Peticion http
+            var xhr = new XMLHttpRequest();
+            //Peticion post a una direccion
+            xhr.open('POST', '/google');
+            //Header de la peticion
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            //Cuando se halla cargado, se ejecuta la funcion tal.
+            xhr.onload = function() {
+                console.log('Signed in as: ' + xhr.responseText);
+            };
+
+            xhr.send('idtoken=' + id_token);
+
+
+
+        }
+    </script>
+
+
+
+</body>
+
+</html>
