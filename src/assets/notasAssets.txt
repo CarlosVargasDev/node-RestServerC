@@ -1,0 +1,2 @@
+En esta carpeta, pondremos  algunas recursos estaticos que sean glovales
+como estilos,imagenes, 

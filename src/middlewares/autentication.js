@@ -9,7 +9,9 @@ let verificaToken = (req, res, next) => {
         if (err) {
             return res.status(401).json({
                 ok: false,
-                error: err
+                error: {
+                    message: 'Token no valido'
+                }
             });
         }
 
@@ -39,9 +41,31 @@ let verificarAdminRole = (req, res, next) => {
     }
 }
 
+let verificaTokenImg = (req, res, next) => {
+    let token = req.query.token;
+    jwt.verify(token, process.env.SEED, (err, decoded) => {
+        //Manejamos el error 401(no autorizado) retornando ello
+        if (err) {
+            return res.status(401).json({
+                ok: false,
+                error: {
+                    message: 'Token no valido'
+                }
+            });
+        }
 
+
+        //decodificamos al usuario 
+        req.usuario = decoded.usuario;
+
+
+        //Despues de verificar el token, llamamos a next el cual es una funcion que precesiga con el resto de la peticion. usuario/usuarioRoutes.js       
+        next();
+    });
+}
 
 module.exports = {
     verificaToken,
-    verificarAdminRole
+    verificarAdminRole,
+    verificaTokenImg
 }
